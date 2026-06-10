@@ -1,153 +1,116 @@
 <x-front-layout :title="$product->name">
-    <x-slot:breadcrumb>
-        <div class="breadcrumbs">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 col-md-6 col-12">
-                        <div class="breadcrumbs-content">
-                            <h1 class="page-title">{{ $product->name }}</h1>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-12">
-                        <ul class="breadcrumb-nav">
-                            <li><a href="{{ route('home') }}"><i class="lni lni-home"></i> Home</a></li>
-                            <li><a href="{{ route('products.index') }}">Shop</a></li>
-                            <li>{{ $product->name }}</li>
-                        </ul>
-                    </div>
-                </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <h1 class="page-header-title">{{ $product->name }}</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Shop</a></li>
+                        @if($product->category)
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('products.index', ['category_id' => $product->category->id]) }}">{{ $product->category->name }}</a>
+                            </li>
+                        @endif
+                        <li class="breadcrumb-item active">{{ Str::limit($product->name, 30) }}</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-    </x-slot:breadcrumb>
+    </div>
 
-    <!-- Start Item Details -->
-    <section class="item-details section">
+    <!-- Product Detail -->
+    <section class="product-detail-section">
         <div class="container">
-            <div class="top-area">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 col-md-12 col-12">
-                        <div class="product-images">
-                            <main id="gallery">
-                                <div class="main-img">
-                                    <img src="{{ $product->image_url }}" id="current" alt="#">
-                                </div>
-                                <div class="images">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                    <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                </div>
-                            </main>
-                        </div>
+            <div class="row g-5">
+
+                <!-- Image -->
+                <div class="col-lg-5">
+                    <div class="product-detail-img-wrap">
+                        @if($product->image)
+                            <img class="product-detail-img" src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                        @else
+                            <div class="product-detail-placeholder"><i class="lni lni-image"></i></div>
+                        @endif
                     </div>
-                    <div class="col-lg-6 col-md-12 col-12">
-                        <div class="product-info">
-                            <h2 class="title">{{ $product->name }}</h2>
-                            <p class="category"><i class="lni lni-tag"></i> Drones:<a
-                                    href="javascript:void(0)">{{ $product->category->name }}</a></p>
-                            <h3 class="price">{{ $product->price }}@if ($product->compare_price)
-                                    <span>{{ $product->compare_price }}</span>
-                                @endif
-                            </h3>
-                            <p class="info-text">{{ $product->description }}</p>
-                            <form action="{{ route('cart.store') }}" method="post">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="form-group color-option">
-                                            <label class="title-label" for="size">Choose color</label>
-                                            <div class="single-checkbox checkbox-style-1">
-                                                <input type="checkbox" id="checkbox-1" checked>
-                                                <label for="checkbox-1"><span></span></label>
-                                            </div>
-                                            <div class="single-checkbox checkbox-style-2">
-                                                <input type="checkbox" id="checkbox-2">
-                                                <label for="checkbox-2"><span></span></label>
-                                            </div>
-                                            <div class="single-checkbox checkbox-style-3">
-                                                <input type="checkbox" id="checkbox-3">
-                                                <label for="checkbox-3"><span></span></label>
-                                            </div>
-                                            <div class="single-checkbox checkbox-style-4">
-                                                <input type="checkbox" id="checkbox-4">
-                                                <label for="checkbox-4"><span></span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="form-group">
-                                            <label for="color">Battery capacity</label>
-                                            <select class="form-control" id="color">
-                                                <option>5100 mAh</option>
-                                                <option>6200 mAh</option>
-                                                <option>8000 mAh</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-12">
-                                        <div class="form-group quantity">
-                                            <label for="color">Quantity</label>
-                                            <select class="form-control" name="quantity">
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="bottom-content">
-                                    <div class="row align-items-end">
-                                        <div class="col-lg-4 col-md-4 col-12">
-                                            <div class="button cart-button">
-                                                <button class="btn" type="submit" style="width: 100%;">Add to
-                                                    Cart</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-12">
-                                            <div class="wish-button">
-                                                <button class="btn"><i class="lni lni-reload"></i> Compare</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-12">
-                                            <div class="wish-button">
-                                                <button class="btn"><i class="lni lni-heart"></i> To
-                                                    Wishlist</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                </div>
+
+                <!-- Details -->
+                <div class="col-lg-7">
+                    @if($product->category)
+                        <a href="{{ route('products.index', ['category_id' => $product->category->id]) }}" class="product-detail-category">
+                            {{ $product->category->name }}
+                        </a>
+                    @endif
+
+                    <h1 class="product-detail-name">{{ $product->name }}</h1>
+
+                    <div class="d-flex align-items-baseline gap-2 mb-1">
+                        <span class="product-detail-price">${{ number_format($product->price, 2) }}</span>
+                        @if($product->compare_price && $product->compare_price > $product->price)
+                            <span class="product-detail-compare">${{ number_format($product->compare_price, 2) }}</span>
+                            <span class="product-sale-badge" style="position:static;">-{{ $product->sale_percent }}%</span>
+                        @endif
+                    </div>
+
+                    @if($product->description)
+                        <p class="product-detail-desc">{{ $product->description }}</p>
+                    @endif
+
+                    <hr class="product-detail-divider">
+
+                    @if(session('success'))
+                        <div class="store-alert store-alert-success mb-3">{{ session('success') }}</div>
+                    @endif
+                    @if(session('error'))
+                        <div class="store-alert store-alert-error mb-3">{{ session('error') }}</div>
+                    @endif
+
+                    <form action="{{ route('cart.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                        <div class="mb-4">
+                            <span class="qty-label">Quantity</span>
+                            <select name="quantity" class="qty-select">
+                                @for($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <div class="d-flex gap-3 flex-wrap">
+                            <button type="submit" class="btn-add-to-cart-detail">
+                                <i class="lni lni-cart"></i> Add to Cart
+                            </button>
+                            <a href="{{ route('cart.index') }}" class="btn-store-outline">
+                                View Cart
+                            </a>
+                        </div>
+                    </form>
+
+                    <div class="product-meta-box">
+                        @if($product->category)
+                        <div class="product-meta-row">
+                            <span class="meta-key">Category</span>
+                            <span class="meta-val">{{ $product->category->name }}</span>
+                        </div>
+                        @endif
+                        <div class="product-meta-row">
+                            <span class="meta-key">Status</span>
+                            <span class="meta-val" style="color:var(--color-success);font-weight:600;">In Stock</span>
+                        </div>
+                        <div class="product-meta-row">
+                            <span class="meta-key">Shipping</span>
+                            <span class="meta-val">Free on orders over $99</span>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
-    <!-- End Item Details -->
-
-    @push('scripts')
-        <script type="text/javascript">
-            const current = document.getElementById("current");
-            const opacity = 0.6;
-            const imgs = document.querySelectorAll(".img");
-            imgs.forEach(img => {
-                img.addEventListener("click", (e) => {
-                    //reset opacity
-                    imgs.forEach(img => {
-                        img.style.opacity = 1;
-                    });
-                    current.src = e.target.src;
-                    //adding class
-                    //current.classList.add("fade-in");
-                    //opacity
-                    e.target.style.opacity = opacity;
-                });
-            });
-        </script>
-    @endpush
 
 </x-front-layout>

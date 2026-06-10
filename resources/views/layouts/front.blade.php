@@ -1,477 +1,168 @@
 <!DOCTYPE html>
-<html class="no-js" lang="zxx">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>ShopGrids - Bootstrap 5 eCommerce HTML Template.</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.svg" />
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $title }}</title>
 
-    <!-- ========================= CSS here ========================= -->
-    <link rel="stylesheet" href="{{ asset('front/assets/css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('front/assets/css/LineIcons.3.0.css') }}" />
-    <link rel="stylesheet" href="{{ asset('front/assets/css/tiny-slider.css') }}" />
-    <link rel="stylesheet" href="{{ asset('front/assets/css/glightbox.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('front/assets/css/main.css') }}" />
-
+    <link rel="stylesheet" href="{{ asset('front/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/assets/css/LineIcons.3.0.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/assets/css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/assets/css/store.css') }}">
 </head>
-
 <body>
-    <!--[if lte IE 9]>
-      <p class="browserupgrade">
-        You are using an <strong>outdated</strong> browser. Please
-        <a href="https://browsehappy.com/">upgrade your browser</a> to improve
-        your experience and security.
-      </p>
-    <![endif]-->
 
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="preloader-inner">
-            <div class="preloader-icon">
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </div>
-    <!-- /End Preloader -->
-
-    <!-- Start Header Area -->
-    <header class="header navbar-area">
-        <!-- Start Topbar -->
-        <div class="topbar">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-4 col-md-4 col-12">
-                        <div class="top-left">
-                            <ul class="menu-top-link">
-                                <li>
-                                    <div class="select-position">
-                                        <select id="select4">
-                                            <option value="0" selected>$ USD</option>
-                                            <option value="1">€ EURO</option>
-                                            <option value="2">$ CAD</option>
-                                            <option value="3">₹ INR</option>
-                                            <option value="4">¥ CNY</option>
-                                            <option value="5">৳ BDT</option>
-                                        </select>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="select-position">
-                                        <select id="select5">
-                                            <option value="0" selected>English</option>
-                                            <option value="1">Español</option>
-                                            <option value="2">Filipino</option>
-                                            <option value="3">Français</option>
-                                            <option value="4">العربية</option>
-                                            <option value="5">हिन्दी</option>
-                                            <option value="6">বাংলা</option>
-                                        </select>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-12">
-                        <div class="top-middle">
-                            <ul class="useful-links">
-                                <li><a href="{{ route('home') }}">Home</a></li>
-                                <li><a href="{{ route('products.index') }}">Shop</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-12">
-                        <div class="top-end">
-                            <div class="user">
-                                <i class="lni lni-user"></i>
-                                @auth {{ auth()->user()->name }} @else Hello @endauth
-                            </div>
-                            <ul class="user-login">
-                                @guest
-                                <li>
-                                    <a href="{{ route('login') }}">Sign In</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('register') }}">Register</a>
-                                </li>
-                                @else
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}" style="display:inline">
-                                        @csrf
-                                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
-                                    </form>
-                                </li>
-                                @endguest
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Topbar -->
-        <!-- Start Header Middle -->
-        <div class="header-middle">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-3 col-md-3 col-7">
-                        <!-- Start Header Logo -->
-                        <a class="navbar-brand" href="{{ route('home') }}">
-                            <img src="assets/images/logo/logo.svg" alt="Logo">
-                        </a>
-                        <!-- End Header Logo -->
-                    </div>
-                    <div class="col-lg-5 col-md-7 d-xs-none">
-                        <!-- Start Main Menu Search -->
-                        <div class="main-menu-search">
-                            <!-- navbar search start -->
-                            <div class="navbar-search search-style-5">
-                                <div class="search-select">
-                                    <div class="select-position">
-                                        <select id="select1">
-                                            <option selected>All</option>
-                                            <option value="1">option 01</option>
-                                            <option value="2">option 02</option>
-                                            <option value="3">option 03</option>
-                                            <option value="4">option 04</option>
-                                            <option value="5">option 05</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="search-input">
-                                    <input type="text" placeholder="Search">
-                                </div>
-                                <div class="search-btn">
-                                    <button><i class="lni lni-search-alt"></i></button>
-                                </div>
-                            </div>
-                            <!-- navbar search Ends -->
-                        </div>
-                        <!-- End Main Menu Search -->
-                    </div>
-                    <div class="col-lg-4 col-md-2 col-5">
-                        <div class="middle-right-area">
-                            <div class="nav-hotline">
-                                <i class="lni lni-phone"></i>
-                                <h3>Hotline:
-                                    <span>(+100) 123 456 7890</span>
-                                </h3>
-                            </div>
-                            <div class="navbar-cart">
-                                <x-cart-menu />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Header Middle -->
-        <!-- Start Header Bottom -->
+    <!-- ── Navbar ── -->
+    <nav class="store-navbar navbar navbar-expand-lg sticky-top" id="storeNav">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-8 col-md-6 col-12">
-                    <div class="nav-inner">
-                        <!-- Start Mega Category Menu -->
-                        <div class="mega-category-menu">
-                            <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
-                            <ul class="sub-category">
-                                <li><a href="product-grids.html">Electronics <i class="lni lni-chevron-right"></i></a>
-                                    <ul class="inner-sub-category">
-                                        <li><a href="product-grids.html">Digital Cameras</a></li>
-                                        <li><a href="product-grids.html">Camcorders</a></li>
-                                        <li><a href="product-grids.html">Camera Drones</a></li>
-                                        <li><a href="product-grids.html">Smart Watches</a></li>
-                                        <li><a href="product-grids.html">Headphones</a></li>
-                                        <li><a href="product-grids.html">MP3 Players</a></li>
-                                        <li><a href="product-grids.html">Microphones</a></li>
-                                        <li><a href="product-grids.html">Chargers</a></li>
-                                        <li><a href="product-grids.html">Batteries</a></li>
-                                        <li><a href="product-grids.html">Cables & Adapters</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="product-grids.html">accessories</a></li>
-                                <li><a href="product-grids.html">Televisions</a></li>
-                                <li><a href="product-grids.html">best selling</a></li>
-                                <li><a href="product-grids.html">top 100 offer</a></li>
-                                <li><a href="product-grids.html">sunglass</a></li>
-                                <li><a href="product-grids.html">watch</a></li>
-                                <li><a href="product-grids.html">man’s product</a></li>
-                                <li><a href="product-grids.html">Home Audio & Theater</a></li>
-                                <li><a href="product-grids.html">Computers & Tablets </a></li>
-                                <li><a href="product-grids.html">Video Games </a></li>
-                                <li><a href="product-grids.html">Home Appliances </a></li>
-                            </ul>
-                        </div>
-                        <!-- End Mega Category Menu -->
-                        <!-- Start Navbar -->
-                        <nav class="navbar navbar-expand-lg">
-                            <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="toggler-icon"></span>
-                                <span class="toggler-icon"></span>
-                                <span class="toggler-icon"></span>
-                            </button>
-                            <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
-                                <ul id="nav" class="navbar-nav ms-auto">
-                                    <li class="nav-item">
-                                        <a href="{{ route('home') }}" class="active" aria-label="Toggle navigation">Home</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('products.index') }}" aria-label="Toggle navigation">Shop</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('cart.index') }}" aria-label="Toggle navigation">Cart</a>
-                                    </li>
-                                    @auth
-                                    <li class="nav-item">
-                                        <a href="{{ route('dashboard.dashboard') }}" aria-label="Toggle navigation">Dashboard</a>
-                                    </li>
-                                    @endauth
-                                </ul>
-                            </div> <!-- navbar collapse -->
-                        </nav>
-                        <!-- End Navbar -->
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-12">
-                    <!-- Start Nav Social -->
-                    <div class="nav-social">
-                        <h5 class="title">Follow Us:</h5>
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><i class="lni lni-instagram"></i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><i class="lni lni-skype"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- End Nav Social -->
+
+            <!-- Brand -->
+            <a class="navbar-brand" href="{{ route('home') }}">
+                <span class="brand-name">{{ config('app.name', 'Store') }}</span>
+            </a>
+
+            <!-- Hamburger -->
+            <button class="navbar-toggler border-0 shadow-none p-1" type="button"
+                data-bs-toggle="collapse" data-bs-target="#storeNavCollapse"
+                aria-controls="storeNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="lni lni-menu" style="font-size:1.35rem;color:var(--color-text);"></i>
+            </button>
+
+            <!-- Links -->
+            <div class="collapse navbar-collapse" id="storeNavCollapse">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('products.index') ? 'active' : '' }}" href="{{ route('products.index') }}">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}" href="{{ route('categories.index') }}">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('cart.index') ? 'active' : '' }}" href="{{ route('cart.index') }}">Cart</a>
+                    </li>
+                    @auth
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('dashboard.*') ? 'active' : '' }}" href="{{ route('dashboard.dashboard') }}">Dashboard</a>
+                    </li>
+                    @endauth
+                </ul>
+
+                <!-- Right actions -->
+                <div class="nav-actions">
+                    <!-- Cart dropdown -->
+                    <x-cart-menu />
+
+                    <div class="nav-divider"></div>
+
+                    @guest
+                        <a href="{{ route('login') }}" class="btn-nav-login">Sign In</a>
+                        <a href="{{ route('register') }}" class="btn-nav-register">Register</a>
+                    @else
+                        <span class="btn-nav-text">{{ auth()->user()->name }}</span>
+                        <form method="POST" action="{{ route('logout') }}" style="display:inline">
+                            @csrf
+                            <button type="submit" class="btn-nav-login">Logout</button>
+                        </form>
+                    @endguest
                 </div>
             </div>
+
         </div>
-        <!-- End Header Bottom -->
-    </header>
-    <!-- End Header Area -->
+    </nav>
+    <!-- ── /Navbar ── -->
 
     {{ $slot }}
 
-    <!-- Start Footer Area -->
-    <footer class="footer">
-        <!-- Start Footer Top -->
-        <div class="footer-top">
-            <div class="container">
-                <div class="inner-content">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-4 col-12">
-                            <div class="footer-logo">
-                                <a href="{{ route('home') }}">
-                                    <img src="assets/images/logo/white-logo.svg" alt="#">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-lg-9 col-md-8 col-12">
-                            <div class="footer-newsletter">
-                                <h4 class="title">
-                                    Subscribe to our Newsletter
-                                    <span>Get all the latest information, Sales and Offers.</span>
-                                </h4>
-                                <div class="newsletter-form-head">
-                                    <form action="#" method="get" target="_blank" class="newsletter-form">
-                                        <input name="EMAIL" placeholder="Email address here..." type="email">
-                                        <div class="button">
-                                            <button class="btn">Subscribe<span class="dir-part"></span></button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+    <!-- ── Footer ── -->
+    <footer class="store-footer">
+        <div class="container">
+            <div class="row g-5 pb-5">
+
+                <!-- Col 1: Brand -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand">{{ config('app.name', 'Store') }}</div>
+                    <p class="footer-desc">Your destination for quality products, delivered fast and securely.</p>
+                    <div class="footer-social">
+                        <a href="javascript:void(0)" class="footer-social-btn"><i class="lni lni-facebook-filled"></i></a>
+                        <a href="javascript:void(0)" class="footer-social-btn"><i class="lni lni-instagram"></i></a>
+                        <a href="javascript:void(0)" class="footer-social-btn"><i class="lni lni-twitter-original"></i></a>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- End Footer Top -->
-        <!-- Start Footer Middle -->
-        <div class="footer-middle">
-            <div class="container">
-                <div class="bottom-inner">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <!-- Single Widget -->
-                            <div class="single-footer f-contact">
-                                <h3>Get In Touch With Us</h3>
-                                <p class="phone">Phone: +1 (900) 33 169 7720</p>
-                                <ul>
-                                    <li><span>Monday-Friday: </span> 9.00 am - 8.00 pm</li>
-                                    <li><span>Saturday: </span> 10.00 am - 6.00 pm</li>
-                                </ul>
-                                <p class="mail">
-                                    <a href="mailto:support@shopgrids.com">support@shopgrids.com</a>
-                                </p>
-                            </div>
-                            <!-- End Single Widget -->
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <!-- Single Widget -->
-                            <div class="single-footer f-link">
-                                <h3>Information</h3>
-                                <ul>
-                                    <li><a href="javascript:void(0)">About Us</a></li>
-                                    <li><a href="javascript:void(0)">Contact Us</a></li>
-                                    <li><a href="javascript:void(0)">Downloads</a></li>
-                                    <li><a href="javascript:void(0)">Sitemap</a></li>
-                                    <li><a href="javascript:void(0)">FAQs Page</a></li>
-                                </ul>
-                            </div>
-                            <!-- End Single Widget -->
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <!-- Single Widget -->
-                            <div class="single-footer f-link">
-                                <h3>Shop Departments</h3>
-                                <ul>
-                                    <li><a href="javascript:void(0)">Computers & Accessories</a></li>
-                                    <li><a href="javascript:void(0)">Smartphones & Tablets</a></li>
-                                    <li><a href="javascript:void(0)">TV, Video & Audio</a></li>
-                                    <li><a href="javascript:void(0)">Cameras, Photo & Video</a></li>
-                                    <li><a href="javascript:void(0)">Headphones</a></li>
-                                </ul>
-                            </div>
-                            <!-- End Single Widget -->
-                        </div>
+
+                <!-- Col 2: Quick Links -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="footer-heading">Shop</h6>
+                    <ul class="footer-links">
+                        <li><a href="{{ route('home') }}">Home</a></li>
+                        <li><a href="{{ route('products.index') }}">All Products</a></li>
+                        <li><a href="{{ route('categories.index') }}">Categories</a></li>
+                        <li><a href="{{ route('cart.index') }}">Cart</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Account -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="footer-heading">Account</h6>
+                    <ul class="footer-links">
+                        @guest
+                            <li><a href="{{ route('login') }}">Sign In</a></li>
+                            <li><a href="{{ route('register') }}">Register</a></li>
+                        @else
+                            <li><a href="{{ route('dashboard.dashboard') }}">Dashboard</a></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" style="display:inline">
+                                    @csrf
+                                    <button type="submit">Logout</button>
+                                </form>
+                            </li>
+                        @endguest
+                    </ul>
+                </div>
+
+                <!-- Col 4: Info -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="footer-heading">We Accept</h6>
+                    <p style="font-size:.78rem;color:rgba(255,255,255,.4);line-height:1.7;">
+                        Secure checkout powered by Stripe. Your payment information is always encrypted.
+                    </p>
+                    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.75rem;">
+                        <span style="background:rgba(255,255,255,.1);border-radius:4px;padding:.25rem .6rem;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em;">VISA</span>
+                        <span style="background:rgba(255,255,255,.1);border-radius:4px;padding:.25rem .6rem;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em;">MASTERCARD</span>
+                        <span style="background:rgba(255,255,255,.1);border-radius:4px;padding:.25rem .6rem;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em;">STRIPE</span>
                     </div>
                 </div>
+
             </div>
         </div>
-        <!-- End Footer Middle -->
-        <!-- Start Footer Bottom -->
+
         <div class="footer-bottom">
             <div class="container">
-                <div class="inner-content">
-                    <div class="row align-items-center">
-                        <div class="col-lg-4 col-12">
-                            <div class="payment-gateway">
-                                <span>We Accept:</span>
-                                <img src="assets/images/footer/credit-cards-footer.png" alt="#">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-12">
-                            <div class="copyright">
-                                <p>Designed and Developed by<a href="https://graygrids.com/" rel="nofollow"
-                                        target="_blank">GrayGrids</a></p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-12">
-                            <ul class="socila">
-                                <li>
-                                    <span>Follow Us On:</span>
-                                </li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-instagram"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-google"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <p>&copy; {{ date('Y') }} {{ config('app.name', 'Store') }}. All rights reserved.</p>
             </div>
         </div>
-        <!-- End Footer Bottom -->
     </footer>
-    <!--/ End Footer Area -->
+    <!-- ── /Footer ── -->
 
-    <!-- ========================= scroll-top ========================= -->
-    <a href="#" class="scroll-top">
-        <i class="lni lni-chevron-up"></i>
-    </a>
+    <!-- Scroll to top -->
+    <a href="#" class="scroll-top"><i class="lni lni-chevron-up"></i></a>
 
-    <!-- ========================= JS here ========================= -->
     <script src="{{ asset('front/assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('front/assets/js/tiny-slider.js') }}"></script>
-    <script src="{{ asset('front/assets/js/glightbox.min.js') }}"></script>
     <script src="{{ asset('front/assets/js/main.js') }}"></script>
-    <script type="text/javascript">
-        //========= Hero Slider
-        tns({
-            container: '.hero-slider',
-            slideBy: 'page',
-            autoplay: true,
-            autoplayButtonOutput: false,
-            mouseDrag: true,
-            gutter: 0,
-            items: 1,
-            nav: false,
-            controls: true,
-            controlsText: ['<i class="lni lni-chevron-left"></i>', '<i class="lni lni-chevron-right"></i>'],
-        });
-
-        //======== Brand Slider
-        tns({
-            container: '.brands-logo-carousel',
-            autoplay: true,
-            autoplayButtonOutput: false,
-            mouseDrag: true,
-            gutter: 15,
-            nav: false,
-            controls: false,
-            responsive: {
-                0: {
-                    items: 1,
-                },
-                540: {
-                    items: 3,
-                },
-                768: {
-                    items: 5,
-                },
-                992: {
-                    items: 6,
-                }
-            }
-        });
-    </script>
     <script>
-        const finaleDate = new Date("February 15, 2023 00:00:00").getTime();
-
-        const timer = () => {
-            const now = new Date().getTime();
-            let diff = finaleDate - now;
-            if (diff < 0) {
-                document.querySelector('.alert').style.display = 'block';
-                document.querySelector('.container').style.display = 'none';
-            }
-
-            let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            let hours = Math.floor(diff % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
-            let minutes = Math.floor(diff % (1000 * 60 * 60) / (1000 * 60));
-            let seconds = Math.floor(diff % (1000 * 60) / 1000);
-
-            days <= 99 ? days = `0${days}` : days;
-            days <= 9 ? days = `00${days}` : days;
-            hours <= 9 ? hours = `0${hours}` : hours;
-            minutes <= 9 ? minutes = `0${minutes}` : minutes;
-            seconds <= 9 ? seconds = `0${seconds}` : seconds;
-
-            document.querySelector('#days').textContent = days;
-            document.querySelector('#hours').textContent = hours;
-            document.querySelector('#minutes').textContent = minutes;
-            document.querySelector('#seconds').textContent = seconds;
-
-        }
-        timer();
-        setInterval(timer, 1000);
+        // Navbar shadow on scroll
+        (function () {
+            var nav = document.getElementById('storeNav');
+            if (!nav) return;
+            window.addEventListener('scroll', function () {
+                nav.classList.toggle('scrolled', window.scrollY > 10);
+            }, { passive: true });
+        })();
     </script>
 
     @stack('scripts')
 </body>
-
 </html>
