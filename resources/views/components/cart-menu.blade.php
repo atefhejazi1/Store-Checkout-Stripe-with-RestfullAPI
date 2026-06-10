@@ -1,38 +1,57 @@
-<div class="cart-items">
-    <a href="javascript:void(0)" class="main-btn">
+<div class="cart-dropdown">
+    <a href="{{ route('cart.index') }}" class="nav-action-btn" style="display:inline-flex;align-items:center;">
         <i class="lni lni-cart"></i>
-        <span class="total-items">{{ $items->count() }}</span>
+        @if($items->count() > 0)
+            <span class="cart-count">{{ $items->count() }}</span>
+        @endif
     </a>
-    <!-- Shopping Item -->
-    <div class="shopping-item">
-        <div class="dropdown-cart-header">
-            <span>{{ $items->count() }} Items</span>
-            <a href="{{ route('cart.index') }}">View Cart</a>
+
+    @if($items->count() > 0)
+    <div class="cart-dropdown-menu">
+        <div class="cart-dropdown-header">
+            <span>{{ $items->count() }} {{ Str::plural('item', $items->count()) }}</span>
+            <a href="{{ route('cart.index') }}">View all</a>
         </div>
-        <ul class="shopping-list">
+
+        <div class="cart-dropdown-items">
             @foreach($items as $item)
-            <li>
-                <a href="javascript:void(0)" class="remove" title="Remove this item"><i class="lni lni-close"></i></a>
-                <div class="cart-img-head">
-                    <a class="cart-img" href="{{ route('products.show', $item->product->slug) }}">
-                        <img src="{{ $item->product->image_url }}" alt="#"></a>
+            <div class="cart-dropdown-item">
+                @if($item->product->image)
+                    <img class="cart-item-img" src="{{ $item->product->image_url }}" alt="{{ $item->product->name }}">
+                @else
+                    <div class="cart-item-img-placeholder"><i class="lni lni-image"></i></div>
+                @endif
+
+                <div class="cart-item-info">
+                    <a href="{{ route('products.show', $item->product->slug) }}" class="cart-item-name">{{ $item->product->name }}</a>
+                    <div class="cart-item-qty">{{ $item->quantity }} &times; {{ $item->product->price }}</div>
                 </div>
-                <div class="content">
-                    <h4><a href="product-details.html">{{ $item->product->name }}</a></h4>
-                    <p class="quantity">{{ $item->quantity }}x - <span class="amount">{{ $item->product->price }}</span></p>
-                </div>
-            </li>
+
+                <form action="{{ route('cart.destroy', $item->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="cart-item-remove" title="Remove"><i class="lni lni-close"></i></button>
+                </form>
+            </div>
             @endforeach
-        </ul>
-        <div class="bottom">
-            <div class="total">
+        </div>
+
+        <div class="cart-dropdown-footer">
+            <div class="cart-dropdown-total">
                 <span>Total</span>
-                <span class="total-amount">{{ $total }}</span>
+                <span>{{ $total }}</span>
             </div>
-            <div class="button">
-                {{-- <a href="{{ route('checkout') }}" class="btn animate">Checkout</a> --}}
-            </div>
+            <a href="{{ route('checkout') }}" class="btn-store-primary w-100 justify-content-center">
+                Checkout
+            </a>
         </div>
     </div>
-    <!--/ End Shopping Item -->
+    @else
+    <div class="cart-dropdown-menu">
+        <div class="cart-empty-msg">
+            <i class="lni lni-cart cart-empty-icon"></i>
+            Your cart is empty
+        </div>
+    </div>
+    @endif
 </div>

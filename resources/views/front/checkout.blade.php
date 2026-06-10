@@ -1,318 +1,182 @@
 <x-front-layout title="Checkout">
 
-    <!--====== Checkout Form Steps Part Start ======-->
-
-    <section class="checkout-wrapper section">
+    <!-- Page Header -->
+    <div class="page-header">
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <h1 class="page-header-title">Checkout</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('cart.index') }}">Cart</a></li>
+                        <li class="breadcrumb-item active">Checkout</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <section class="checkout-section">
+        <div class="container">
+            <div class="row g-4 align-items-start">
+
+                <!-- Form -->
                 <div class="col-lg-8">
-                    <form action="{{ route('checkout') }}" method="post" id="payment-form">
+                    <form action="{{ route('checkout') }}" method="POST" id="payment-form">
                         @csrf
-                        <div class="checkout-steps-form-style-1">
-                            <ul id="accordionExample">
-                                <li>
-                                    <h6 class="title" data-bs-toggle="collapse" data-bs-target="#collapseThree"
-                                        aria-expanded="true" aria-controls="collapseThree">Your Personal Details </h6>
-                                    <section class="checkout-steps-form-content collapse show" id="collapseThree"
-                                        aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="single-form form-default">
-                                                    <label>User Name</label>
-                                                    <div class="row">
-                                                        <div class="col-md-6 form-input form">
-                                                            <x-form.input name="addr[billing][first_name]"
-                                                                placeholder="First Name" />
-                                                        </div>
-                                                        <div class="col-md-6 form-input form">
-                                                            <x-form.input name="addr[billing][last_name]"
-                                                                placeholder="Last Name" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Email Address</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[billing][email]"
-                                                            placeholder="Email Address" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Phone Number</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[billing][phone_number]"
-                                                            placeholder="Phone Number" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="single-form form-default">
-                                                    <label>Mailing Address</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[billing][street_address]"
-                                                            placeholder="Mailing Address" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>City</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[billing][city]" placeholder="City" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Post Code</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[billing][postal_code]"
-                                                            placeholder="Post Code" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Region/State</label>
-                                                    <div class="select-items">
-                                                        <x-form.input name="addr[billing][state]" placeholder="State" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Country</label>
-                                                    <div class="form-input form">
-                                                        <x-form.select name="addr[billing][country]"
-                                                            :options="$countries" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="single-checkbox checkbox-style-3">
-                                                    <input type="checkbox" id="checkbox-3">
-                                                    <label for="checkbox-3"><span></span></label>
-                                                    <p>My delivery and mailing addresses are the same.</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="single-form button">
-                                                    <button class="btn" data-bs-toggle="collapse" type="button"
-                                                        data-bs-target="#collapseFour" aria-expanded="false"
-                                                        aria-controls="collapseFour">next
-                                                        step</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </li>
-                                <li>
-                                    <h6 class="title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour"
-                                        aria-expanded="false" aria-controls="collapseFour">Shipping Address</h6>
-                                    <section class="checkout-steps-form-content collapse" id="collapseFour"
-                                        aria-labelledby="headingFour" data-bs-parent="#accordionExample">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="single-form form-default">
-                                                    <label>User Name</label>
-                                                    <div class="row">
-                                                        <div class="col-md-6 form-input form">
-                                                            <x-form.input name="addr[shipping][first_name]"
-                                                                placeholder="First Name" />
-                                                        </div>
-                                                        <div class="col-md-6 form-input form">
-                                                            <x-form.input name="addr[shipping][last_name]"
-                                                                placeholder="Last Name" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Email Address</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[shipping][email]"
-                                                            placeholder="Email Address" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Phone Number</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[shipping][phone_number]"
-                                                            placeholder="Phone Number" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="single-form form-default">
-                                                    <label>Mailing Address</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[shipping][street_address]"
-                                                            placeholder="Mailing Address" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>City</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[shipping][city]"
-                                                            placeholder="City" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Post Code</label>
-                                                    <div class="form-input form">
-                                                        <x-form.input name="addr[shipping][postal_code]"
-                                                            placeholder="Post Code" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Region/State</label>
-                                                    <div class="select-items">
-                                                        <x-form.input name="addr[shipping][state]"
-                                                            placeholder="State" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form form-default">
-                                                    <label>Country</label>
-                                                    <div class="form-input form">
-                                                        <x-form.select name="addr[shipping][country]"
-                                                            :options="$countries" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="checkout-payment-option">
-                                                    <h6 class="heading-6 font-weight-400 payment-title">Select Delivery
-                                                        Option</h6>
-                                                    <div class="payment-option-wrapper">
-                                                        <div class="single-payment-option">
-                                                            <input type="radio" name="shipping" checked
-                                                                id="shipping-1">
-                                                            <label for="shipping-1">
-                                                                <img src="https://via.placeholder.com/60x32"
-                                                                    alt="Sipping">
-                                                                <p>Standerd Shipping</p>
-                                                                <span class="price">$10.50</span>
-                                                            </label>
-                                                        </div>
-                                                        <div class="single-payment-option">
-                                                            <input type="radio" name="shipping" id="shipping-2">
-                                                            <label for="shipping-2">
-                                                                <img src="https://via.placeholder.com/60x32"
-                                                                    alt="Sipping">
-                                                                <p>Standerd Shipping</p>
-                                                                <span class="price">$10.50</span>
-                                                            </label>
-                                                        </div>
-                                                        <div class="single-payment-option">
-                                                            <input type="radio" name="shipping" id="shipping-3">
-                                                            <label for="shipping-3">
-                                                                <img src="https://via.placeholder.com/60x32"
-                                                                    alt="Sipping">
-                                                                <p>Standerd Shipping</p>
-                                                                <span class="price">$10.50</span>
-                                                            </label>
-                                                        </div>
-                                                        <div class="single-payment-option">
-                                                            <input type="radio" name="shipping" id="shipping-4">
-                                                            <label for="shipping-4">
-                                                                <img src="https://via.placeholder.com/60x32"
-                                                                    alt="Sipping">
-                                                                <p>Standerd Shipping</p>
-                                                                <span class="price">$10.50</span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="steps-form-btn button">
-                                                    <button class="btn" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapseThree" aria-expanded="false"
-                                                        aria-controls="collapseThree">previous</button>
-                                                    <a href="javascript:void(0)" class="btn btn-alt">Save &
-                                                        Continue</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </li>
-                                <li>
-                                    <h6 class="title collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#collapsefive" aria-expanded="false"
-                                        aria-controls="collapsefive">Payment Info</h6>
-                                    <section class="checkout-steps-form-content collapse" id="collapsefive"
-                                        aria-labelledby="headingFive" data-bs-parent="#accordionExample">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="checkout-payment-form">
-                                                    <div class="single-form form-default button">
-                                                        <button type="submit" id="submit" class="btn">pay
-                                                            now</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </li>
+
+                        @if($errors->any())
+                        <div class="store-alert store-alert-error mb-3">
+                            <ul class="mb-0 ps-3">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
                             </ul>
                         </div>
+                        @endif
+
+                        <!-- Billing Address -->
+                        <div class="checkout-card">
+                            <h2 class="checkout-card-title">Billing Address</h2>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">First Name</label>
+                                    <x-form.input name="addr[billing][first_name]" placeholder="First Name" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Last Name</label>
+                                    <x-form.input name="addr[billing][last_name]" placeholder="Last Name" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Email Address</label>
+                                    <x-form.input name="addr[billing][email]" placeholder="Email Address" type="email" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Phone Number</label>
+                                    <x-form.input name="addr[billing][phone_number]" placeholder="Phone Number" type="tel" />
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label-sm">Street Address</label>
+                                    <x-form.input name="addr[billing][street_address]" placeholder="Street Address" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">City</label>
+                                    <x-form.input name="addr[billing][city]" placeholder="City" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Postal Code</label>
+                                    <x-form.input name="addr[billing][postal_code]" placeholder="Postal Code" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">State / Region</label>
+                                    <x-form.input name="addr[billing][state]" placeholder="State" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Country</label>
+                                    <x-form.select name="addr[billing][country]" :options="$countries" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="checkout-card">
+                            <h2 class="checkout-card-title">Shipping Address</h2>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">First Name</label>
+                                    <x-form.input name="addr[shipping][first_name]" placeholder="First Name" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Last Name</label>
+                                    <x-form.input name="addr[shipping][last_name]" placeholder="Last Name" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Email Address</label>
+                                    <x-form.input name="addr[shipping][email]" placeholder="Email Address" type="email" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Phone Number</label>
+                                    <x-form.input name="addr[shipping][phone_number]" placeholder="Phone Number" type="tel" />
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label-sm">Street Address</label>
+                                    <x-form.input name="addr[shipping][street_address]" placeholder="Street Address" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">City</label>
+                                    <x-form.input name="addr[shipping][city]" placeholder="City" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Postal Code</label>
+                                    <x-form.input name="addr[shipping][postal_code]" placeholder="Postal Code" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">State / Region</label>
+                                    <x-form.input name="addr[shipping][state]" placeholder="State" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label-sm">Country</label>
+                                    <x-form.select name="addr[shipping][country]" :options="$countries" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Place Order -->
+                        <div class="checkout-card">
+                            <h2 class="checkout-card-title">Place Your Order</h2>
+                            <p style="font-size:.85rem;color:var(--color-muted);margin-bottom:1.25rem;">
+                                Review your details above and click the button below to complete your order. You'll be redirected to our secure payment page.
+                            </p>
+                            <button type="submit" id="submit" class="btn-store-primary">
+                                <i class="lni lni-lock"></i> Place Order &amp; Pay
+                            </button>
+                        </div>
+
                     </form>
                 </div>
+
+                <!-- Order Summary -->
                 <div class="col-lg-4">
-                    <div class="checkout-sidebar">
-                        <div class="checkout-sidebar-coupon">
-                            <p>Appy Coupon to get discount!</p>
-                            <form action="#">
-                                <div class="single-form form-default">
-                                    <div class="form-input form">
-                                        <input type="text" placeholder="Coupon Code">
-                                    </div>
-                                    <div class="button">
-                                        <button class="btn">apply</button>
-                                    </div>
-                                </div>
-                            </form>
+                    <div class="checkout-summary-box">
+                        <div class="order-summary-title">Your Order</div>
+
+                        @foreach($cart->get() as $item)
+                        <div class="checkout-item-row">
+                            @if($item->product->image)
+                                <img class="checkout-item-img" src="{{ $item->product->image_url }}" alt="{{ $item->product->name }}">
+                            @else
+                                <div class="checkout-item-img-ph"><i class="lni lni-image"></i></div>
+                            @endif
+                            <div class="checkout-item-info">
+                                <div class="checkout-item-name">{{ $item->product->name }}</div>
+                                <div class="checkout-item-qty">Qty: {{ $item->quantity }}</div>
+                            </div>
+                            <div class="checkout-item-price">${{ number_format($item->quantity * $item->product->price, 2) }}</div>
                         </div>
-                        <div class="checkout-sidebar-price-table mt-30">
-                            <h5 class="title">Pricing Table</h5>
+                        @endforeach
 
-                            <div class="sub-total-price">
-                                <div class="total-price">
-                                    <p class="value">Subtotal:</p>
-                                    <p class="price">{{ $cart->total() }}</p>
-                                </div>
-                                <div class="total-price shipping">
-                                    <p class="value">Shipping:</p>
-                                    <p class="price">Free</p>
-                                </div>
-                            </div>
+                        <div class="summary-row mt-3">
+                            <span class="summary-label">Subtotal</span>
+                            <span class="summary-value">${{ number_format($cart->total(), 2) }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Shipping</span>
+                            <span class="summary-value" style="color:var(--color-success);">Free</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total</span>
+                            <span>${{ number_format($cart->total(), 2) }}</span>
+                        </div>
 
-                            <div class="total-payable">
-                                <div class="payable-price">
-                                    <p class="value">Total:</p>
-                                    <p class="price">{{ $cart->total() }}</p>
-                                </div>
-                            </div>
+                        <div class="mt-3 d-flex align-items-center gap-2" style="font-size:.75rem;color:var(--color-muted);">
+                            <i class="lni lni-lock" style="color:var(--color-success);"></i>
+                            Secured by Stripe
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
-</x-front-layout>
 
+</x-front-layout>
