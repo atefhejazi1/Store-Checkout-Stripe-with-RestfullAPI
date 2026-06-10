@@ -108,12 +108,11 @@
                                     <ul>
                                         <li>Cart Subtotal<span>{{ $cart->total() }}</span></li>
                                         <li>Shipping<span>Free</span></li>
-                                        <li>You Save<span>$29.00</span></li>
-                                        <li class="last">You Pay<span>$2531.00</span></li>
+                                        <li class="last">You Pay<span>{{ $cart->total() }}</span></li>
                                     </ul>
                                     <div class="button">
                                         <a href="{{ route('checkout')}}" class="btn">Checkout</a>
-                                        <a href="product-grids.html" class="btn btn-alt">Continue shopping</a>
+                                        <a href="{{ route('products.index') }}" class="btn btn-alt">Continue shopping</a>
                                     </div>
                                 </div>
                             </div>

@@ -130,7 +130,7 @@
                                                 <td>
                                                     <div class="d-flex">
                                                         <!--begin::Thumbnail-->
-                                                        <a href="../../demo1/dist/apps/ecommerce/catalog/edit-category.html"
+                                                        <a href="{{ route('dashboard.categories.edit', $category->id) }}"
                                                             class="symbol symbol-50px">
                                                             <span class="symbol-label"
                                                                 {{-- style="background-image: url('{{ asset('uploads/' . $category->image) }}');"></span> --}}
@@ -139,7 +139,7 @@
                                                         <!--end::Thumbnail-->
                                                         <div class="ms-5">
                                                             <!--begin::Title-->
-                                                            <a href="../../demo1/dist/apps/ecommerce/catalog/edit-category.html"
+                                                            <a href="{{ route('dashboard.categories.edit', $category->id) }}"
                                                                 class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
                                                                 data-kt-ecommerce-category-filter="category_name">{{ $category->name }}</a>
                                                             <!--end::Title-->
@@ -153,7 +153,7 @@
                                                 <td>
                                                     <!--begin::Badges-->
                                                     <div class="badge badge-light-info">
-                                                        {{ $category->parent->name }}</div>
+                                                        {{ $category->parent->name ?? '—' }}</div>
                                                     <!--end::Badges-->
                                                 </td>
                                                 <!--end::Category=-->

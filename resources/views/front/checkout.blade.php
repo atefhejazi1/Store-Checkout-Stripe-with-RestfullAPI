@@ -293,33 +293,21 @@
 
                             <div class="sub-total-price">
                                 <div class="total-price">
-                                    <p class="value">Subotal Price:</p>
+                                    <p class="value">Subtotal:</p>
                                     <p class="price">{{ $cart->total() }}</p>
                                 </div>
                                 <div class="total-price shipping">
-                                    <p class="value">Subotal Price:</p>
-                                    <p class="price">$10.50</p>
-                                </div>
-                                <div class="total-price discount">
-                                    <p class="value">Subotal Price:</p>
-                                    <p class="price">$10.00</p>
+                                    <p class="value">Shipping:</p>
+                                    <p class="price">Free</p>
                                 </div>
                             </div>
 
                             <div class="total-payable">
                                 <div class="payable-price">
-                                    <p class="value">Subotal Price:</p>
+                                    <p class="value">Total:</p>
                                     <p class="price">{{ $cart->total() }}</p>
                                 </div>
                             </div>
-                            <div class="price-table-btn button">
-                                <a href="javascript:void(0)" class="btn btn-alt">Checkout</a>
-                            </div>
-                        </div>
-                        <div class="checkout-sidebar-banner mt-30">
-                            <a href="product-grids.html">
-                                <img src="https://via.placeholder.com/400x330" alt="#">
-                            </a>
                         </div>
                     </div>
                 </div>

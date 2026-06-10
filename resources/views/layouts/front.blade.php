@@ -78,9 +78,8 @@
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-middle">
                             <ul class="useful-links">
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="about-us.html">About Us</a></li>
-                                <li><a href="contact.html">Contact Us</a></li>
+                                <li><a href="{{ route('home') }}">Home</a></li>
+                                <li><a href="{{ route('products.index') }}">Shop</a></li>
                             </ul>
                         </div>
                     </div>
@@ -88,15 +87,24 @@
                         <div class="top-end">
                             <div class="user">
                                 <i class="lni lni-user"></i>
-                                Hello
+                                @auth {{ auth()->user()->name }} @else Hello @endauth
                             </div>
                             <ul class="user-login">
+                                @guest
                                 <li>
-                                    <a href="login.html">Sign In</a>
+                                    <a href="{{ route('login') }}">Sign In</a>
                                 </li>
                                 <li>
-                                    <a href="register.html">Register</a>
+                                    <a href="{{ route('register') }}">Register</a>
                                 </li>
+                                @else
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}" style="display:inline">
+                                        @csrf
+                                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                    </form>
+                                </li>
+                                @endguest
                             </ul>
                         </div>
                     </div>
@@ -110,7 +118,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-7">
                         <!-- Start Header Logo -->
-                        <a class="navbar-brand" href="index.html">
+                        <a class="navbar-brand" href="{{ route('home') }}">
                             <img src="assets/images/logo/logo.svg" alt="Logo">
                         </a>
                         <!-- End Header Logo -->
@@ -152,12 +160,6 @@
                                 </h3>
                             </div>
                             <div class="navbar-cart">
-                                <div class="wishlist">
-                                    <a href="javascript:void(0)">
-                                        <i class="lni lni-heart"></i>
-                                        <span class="total-items">0</span>
-                                    </a>
-                                </div>
                                 <x-cart-menu />
                             </div>
                         </div>
@@ -215,52 +217,19 @@
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
                                     <li class="nav-item">
-                                        <a href="index.html" class="active" aria-label="Toggle navigation">Home</a>
+                                        <a href="{{ route('home') }}" class="active" aria-label="Toggle navigation">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)"
-                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-2"
-                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                            aria-label="Toggle navigation">Pages</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-2">
-                                            <li class="nav-item"><a href="about-us.html">About Us</a></li>
-                                            <li class="nav-item"><a href="faq.html">Faq</a></li>
-                                            <li class="nav-item"><a href="login.html">Login</a></li>
-                                            <li class="nav-item"><a href="register.html">Register</a></li>
-                                            <li class="nav-item"><a href="mail-success.html">Mail Success</a></li>
-                                            <li class="nav-item"><a href="404.html">404 Error</a></li>
-                                        </ul>
+                                        <a href="{{ route('products.index') }}" aria-label="Toggle navigation">Shop</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)"
-                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-3"
-                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                            aria-label="Toggle navigation">Shop</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-3">
-                                            <li class="nav-item"><a href="product-grids.html">Shop Grid</a></li>
-                                            <li class="nav-item"><a href="product-list.html">Shop List</a></li>
-                                            <li class="nav-item"><a href="product-details.html">shop Single</a></li>
-                                            <li class="nav-item"><a href="cart.html">Cart</a></li>
-                                            <li class="nav-item"><a href="checkout.html">Checkout</a></li>
-                                        </ul>
+                                        <a href="{{ route('cart.index') }}" aria-label="Toggle navigation">Cart</a>
                                     </li>
+                                    @auth
                                     <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)"
-                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-4"
-                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                            aria-label="Toggle navigation">Blog</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-4">
-                                            <li class="nav-item"><a href="blog-grid-sidebar.html">Blog Grid
-                                                    Sidebar</a>
-                                            </li>
-                                            <li class="nav-item"><a href="blog-single.html">Blog Single</a></li>
-                                            <li class="nav-item"><a href="blog-single-sidebar.html">Blog Single
-                                                    Sibebar</a></li>
-                                        </ul>
+                                        <a href="{{ route('dashboard.dashboard') }}" aria-label="Toggle navigation">Dashboard</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="contact.html" aria-label="Toggle navigation">Contact Us</a>
-                                    </li>
+                                    @endauth
                                 </ul>
                             </div> <!-- navbar collapse -->
                         </nav>
@@ -305,7 +274,7 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-12">
                             <div class="footer-logo">
-                                <a href="index.html">
+                                <a href="{{ route('home') }}">
                                     <img src="assets/images/logo/white-logo.svg" alt="#">
                                 </a>
                             </div>
@@ -348,29 +317,6 @@
                                 <p class="mail">
                                     <a href="mailto:support@shopgrids.com">support@shopgrids.com</a>
                                 </p>
-                            </div>
-                            <!-- End Single Widget -->
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <!-- Single Widget -->
-                            <div class="single-footer our-app">
-                                <h3>Our Mobile App</h3>
-                                <ul class="app-btn">
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <i class="lni lni-apple"></i>
-                                            <span class="small-title">Download on the</span>
-                                            <span class="big-title">App Store</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <i class="lni lni-play-store"></i>
-                                            <span class="small-title">Download on the</span>
-                                            <span class="big-title">Google Play</span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </div>
                             <!-- End Single Widget -->
                         </div>

@@ -220,8 +220,8 @@
                                 <img src="{{ $product->image_url }}" alt="#">
                                 <span class="sale-tag">{{ $product->sale_percent }}%</span>
                                 <div class="button">
-                                    <a href="{{ route('products.show', $product->id) }}" class="btn"><i
-                                            class="lni lni-cart"></i> Add to Cart</a>
+                                    <a href="{{ route('products.show', $product->slug) }}" class="btn"><i
+                                            class="lni lni-cart"></i> View Product</a>
                                 </div>
                             </div>
                             <div class="product-info">
