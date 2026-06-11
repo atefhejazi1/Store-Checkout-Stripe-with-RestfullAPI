@@ -39,7 +39,12 @@
                     </div>
 
                     <form id="payment-form">
-                        <div id="payment-element" style="margin-bottom:1.5rem;"></div>
+                        <div id="payment-element"
+                         style="margin-bottom:1.5rem;padding:.75rem 1rem;
+                                border:1.5px solid #e2e8f0;border-radius:10px;
+                                background:#fff;transition:border-color .2s;"
+                         onfocus="this.style.borderColor='#0167f3'"
+                         onblur="this.style.borderColor='#e2e8f0'"></div>
 
                         <button type="submit" id="submit"
                                 style="width:100%;padding:.85rem;background:#0167f3;color:#fff;border:none;
@@ -113,9 +118,9 @@
 @push('scripts')
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    const stripe   = Stripe("{{ config('services.stripe.publishable_key') }}");
+    const stripe    = Stripe("{{ config('services.stripe.publishable_key') }}");
     const submitBtn = document.getElementById('submit');
-    let elements;
+    let cardElement;
 
     (async function initialize() {
         const res = await fetch("{{ route('stripe.paymentIntent.create', $order->id) }}", {
@@ -131,26 +136,57 @@
 
         const { clientSecret } = await res.json();
 
-        elements = stripe.elements({ clientSecret, appearance: {
-            theme: 'stripe',
-            variables: { colorPrimary: '#0167f3', fontFamily: 'Inter, system-ui, sans-serif',
-                         borderRadius: '8px', colorText: '#0f172a' }
-        }});
+        // Store for use in submit
+        submitBtn.dataset.clientSecret = clientSecret;
 
-        elements.create('payment').mount('#payment-element');
+        const elements = stripe.elements({
+            fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap' }],
+        });
+
+        cardElement = elements.create('card', {
+            style: {
+                base: {
+                    color:           '#0f172a',
+                    fontFamily:      'Inter, system-ui, sans-serif',
+                    fontSize:        '15px',
+                    fontWeight:      '400',
+                    lineHeight:      '1.6',
+                    '::placeholder': { color: '#94a3b8' },
+                },
+                invalid: { color: '#ef4444' },
+            },
+            hidePostalCode: false,
+        });
+
+        cardElement.mount('#payment-element');
+
+        cardElement.on('change', (e) => {
+            if (e.error) showMessage(e.error.message);
+            else document.getElementById('payment-message').style.display = 'none';
+        });
     })();
 
     document.getElementById('payment-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: { return_url: "{{ route('stripe.return', $order->id) }}" },
+        const clientSecret = submitBtn.dataset.clientSecret;
+
+        const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: { card: cardElement },
         });
 
         if (error) {
             showMessage(error.message ?? 'An unexpected error occurred.');
+            setLoading(false);
+            return;
+        }
+
+        if (paymentIntent && paymentIntent.status === 'succeeded') {
+            window.location.href = "{{ route('stripe.return', $order->id) }}"
+                + '?payment_intent=' + paymentIntent.id
+                + '&payment_intent_client_secret=' + clientSecret;
+            return;
         }
 
         setLoading(false);

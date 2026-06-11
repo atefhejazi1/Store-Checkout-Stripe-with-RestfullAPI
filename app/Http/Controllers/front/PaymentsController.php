@@ -29,14 +29,14 @@ class PaymentsController extends Controller
         $amount = (int) ($order->items->sum(fn ($item) => $item->price * $item->quantity) * 100);
 
         $stripe = new \Stripe\StripeClient([
-            'api_key'         => config('services.stripe.secret_key'),
-            'stripe_version'  => '2025-04-30.preview',
+            'api_key'        => config('services.stripe.secret_key'),
+            'stripe_version' => '2025-04-30.preview',
         ]);
 
         $paymentIntent = $stripe->paymentIntents->create([
-            'amount'                    => $amount,
-            'currency'                  => 'usd',
-            'automatic_payment_methods' => ['enabled' => true],
+            'amount'               => $amount,
+            'currency'             => 'usd',
+            'payment_method_types' => ['card'],
         ]);
 
         try {
