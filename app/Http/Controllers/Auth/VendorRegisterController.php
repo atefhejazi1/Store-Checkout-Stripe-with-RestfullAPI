@@ -58,6 +58,6 @@ class VendorRegisterController extends Controller
             Auth::login($user);
         });
 
-        return redirect()->route('vendor.pending');
+        return redirect()->route('vendor.dashboard');
     }
 }

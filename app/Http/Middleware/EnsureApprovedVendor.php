@@ -11,7 +11,8 @@ class EnsureApprovedVendor
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->user()->isApprovedVendor()) {
-            return redirect()->route('vendor.pending');
+            return redirect()->route('vendor.dashboard')
+                ->with('pending_notice', true);
         }
 
         return $next($request);

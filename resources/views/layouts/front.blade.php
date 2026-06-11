@@ -46,7 +46,7 @@
                     </li>
                     @auth
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('dashboard.*') ? 'active' : '' }}" href="{{ route('dashboard.dashboard') }}">Dashboard</a>
+                        <a class="nav-link" href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isVendor() ? route('vendor.dashboard') : '#') }}">Dashboard</a>
                     </li>
                     @endauth
                 </ul>
@@ -112,7 +112,7 @@
                             <li><a href="{{ route('login') }}">Sign In</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
-                            <li><a href="{{ route('dashboard.dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isVendor() ? route('vendor.dashboard') : '#') }}">Dashboard</a></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}" style="display:inline">
                                     @csrf
