@@ -33,40 +33,97 @@
             <div class="collapse navbar-collapse" id="storeNavCollapse">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
+                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
+                           href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('products.index') ? 'active' : '' }}" href="{{ route('products.index') }}">Shop</a>
+                        <a class="nav-link {{ request()->routeIs('products.index') ? 'active' : '' }}"
+                           href="{{ route('products.index') }}">Shop</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}" href="{{ route('categories.index') }}">Categories</a>
+                        <a class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}"
+                           href="{{ route('categories.index') }}">Categories</a>
                     </li>
+                    @guest
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('cart.index') ? 'active' : '' }}" href="{{ route('cart.index') }}">Cart</a>
+                        <a class="nav-link {{ request()->routeIs('vendor.register') ? 'active' : '' }}"
+                           href="{{ route('vendor.register') }}">Sell on {{ config('app.name') }}</a>
                     </li>
-                    @auth
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isVendor() ? route('vendor.dashboard') : '#') }}">Dashboard</a>
-                    </li>
-                    @endauth
+                    @endguest
                 </ul>
 
                 <!-- Right actions -->
-                <div class="nav-actions">
-                    <!-- Cart dropdown -->
+                <div class="nav-actions d-flex align-items-center gap-2">
+
+                    <!-- Cart icon with dropdown -->
                     <x-cart-menu />
 
                     <div class="nav-divider"></div>
 
                     @guest
+                        <!-- Sign In -->
                         <a href="{{ route('login') }}" class="btn-nav-login">Sign In</a>
-                        <a href="{{ route('register') }}" class="btn-nav-register">Register</a>
+
+                        <!-- Register dropdown -->
+                        <div class="dropdown">
+                            <button class="btn-nav-register dropdown-toggle border-0 bg-transparent"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Register
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2"
+                                style="min-width:200px;border-radius:10px;padding:.5rem;">
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 px-3" href="{{ route('register') }}">
+                                        <i class="lni lni-user me-2 text-muted"></i>
+                                        <span class="fw-semibold" style="font-size:.875rem;">Customer Account</span>
+                                        <div class="text-muted" style="font-size:.75rem;padding-left:1.5rem;">Shop and checkout</div>
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 px-3" href="{{ route('vendor.register') }}">
+                                        <i class="lni lni-store me-2 text-muted"></i>
+                                        <span class="fw-semibold" style="font-size:.875rem;">Become a Vendor</span>
+                                        <div class="text-muted" style="font-size:.75rem;padding-left:1.5rem;">Open your own store</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
                     @else
-                        <span class="btn-nav-text">{{ auth()->user()->name }}</span>
-                        <form method="POST" action="{{ route('logout') }}" style="display:inline">
-                            @csrf
-                            <button type="submit" class="btn-nav-login">Logout</button>
-                        </form>
+                        <!-- Dashboard link — admins and vendors only -->
+                        @if (auth()->user()->isAdmin() || auth()->user()->isVendor())
+                            <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('vendor.dashboard') }}"
+                               class="btn-nav-login">Dashboard</a>
+                        @endif
+
+                        <!-- User name + logout -->
+                        <div class="dropdown">
+                            <button class="btn-nav-register dropdown-toggle border-0 bg-transparent"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ auth()->user()->name }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2"
+                                style="min-width:180px;border-radius:10px;padding:.5rem;">
+                                <li>
+                                    <span class="dropdown-item-text text-muted py-1 px-3"
+                                          style="font-size:.75rem;">
+                                        {{ auth()->user()->email }}
+                                    </span>
+                                </li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit"
+                                                class="dropdown-item rounded-2 py-2 px-3 text-danger"
+                                                style="font-size:.875rem;">
+                                            <i class="lni lni-exit me-2"></i>Sign Out
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     @endguest
                 </div>
             </div>
@@ -82,7 +139,7 @@
         <div class="container">
             <div class="row g-5 pb-5">
 
-                <!-- Col 1: Brand -->
+                <!-- Brand -->
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-brand">{{ config('app.name', 'Store') }}</div>
                     <p class="footer-desc">Your destination for quality products, delivered fast and securely.</p>
@@ -93,7 +150,7 @@
                     </div>
                 </div>
 
-                <!-- Col 2: Quick Links -->
+                <!-- Shop links -->
                 <div class="col-lg-2 col-md-6 col-6">
                     <h6 class="footer-heading">Shop</h6>
                     <ul class="footer-links">
@@ -104,26 +161,33 @@
                     </ul>
                 </div>
 
-                <!-- Col 3: Account -->
+                <!-- Account links -->
                 <div class="col-lg-2 col-md-6 col-6">
                     <h6 class="footer-heading">Account</h6>
                     <ul class="footer-links">
                         @guest
                             <li><a href="{{ route('login') }}">Sign In</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
+                            <li><a href="{{ route('vendor.register') }}">Become a Vendor</a></li>
                         @else
-                            <li><a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isVendor() ? route('vendor.dashboard') : '#') }}">Dashboard</a></li>
+                            @if (auth()->user()->isAdmin())
+                                <li><a href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
+                            @elseif (auth()->user()->isVendor())
+                                <li><a href="{{ route('vendor.dashboard') }}">My Dashboard</a></li>
+                            @endif
                             <li>
                                 <form method="POST" action="{{ route('logout') }}" style="display:inline">
                                     @csrf
-                                    <button type="submit">Logout</button>
+                                    <button type="submit" style="background:none;border:none;padding:0;color:inherit;cursor:pointer;">
+                                        Sign Out
+                                    </button>
                                 </form>
                             </li>
                         @endguest
                     </ul>
                 </div>
 
-                <!-- Col 4: Info -->
+                <!-- Payments -->
                 <div class="col-lg-4 col-md-6">
                     <h6 class="footer-heading">We Accept</h6>
                     <p style="font-size:.78rem;color:rgba(255,255,255,.4);line-height:1.7;">
@@ -147,13 +211,11 @@
     </footer>
     <!-- ── /Footer ── -->
 
-    <!-- Scroll to top -->
     <a href="#" class="scroll-top"><i class="lni lni-chevron-up"></i></a>
 
     <script src="{{ asset('front/assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('front/assets/js/main.js') }}"></script>
     <script>
-        // Navbar shadow on scroll
         (function () {
             var nav = document.getElementById('storeNav');
             if (!nav) return;
