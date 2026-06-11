@@ -34,15 +34,12 @@ class Product extends Model
         'image_url',
     ];
 
-
-
     protected static function booted()
     {
         static::creating(function (Product $product) {
             $product->slug = Str::slug($product->name);
         });
     }
-
 
     public function category()
     {
@@ -53,10 +50,9 @@ class Product extends Model
 
     public function store()
     {
-        return $this->belongsTo(Store::class, 'store_id', 'id')
-            ->withDefault([
-                'name' => 'No Store',
-            ]);
+        return $this->belongsTo(Store::class, 'store_id', 'id')->withDefault([
+            'name' => 'No Store',
+        ]);
     }
 
     public function getImageUrlAttribute()
@@ -75,29 +71,28 @@ class Product extends Model
         if (!$this->compare_price || $this->compare_price == 0) {
             return 0;
         }
-
         $discount = 100 * ($this->compare_price - $this->price) / $this->compare_price;
         return round($discount, 1);
     }
 
+    public function scopeForVendor(Builder $builder, User $user): Builder
+    {
+        return $builder->where('store_id', optional($user->store)->id ?? 0);
+    }
 
-    public function scopeFilter(Builder $builder, $filters)
+    public function scopeFilter(Builder $builder, array $filters)
     {
         $options = array_merge([
-            'store_id' => null,
+            'store_id'    => null,
             'category_id' => null,
-            'status' => 'active',
+            'status'      => 'active',
         ], $filters);
 
-        $builder->when($options['status'], function ($query, $status) {
-            return $query->where('status', $status);
-        });
+        // Only surface products from approved, active stores on the storefront
+        $builder->whereHas('store', fn ($q) => $q->where('vendor_status', 'approved')->where('status', 'active'));
 
-        $builder->when($options['store_id'], function ($builder, $value) {
-            $builder->where('store_id', $value);
-        });
-        $builder->when($options['category_id'], function ($builder, $value) {
-            $builder->where('category_id', $value);
-        });
+        $builder->when($options['status'], fn ($q, $status) => $q->where('status', $status));
+        $builder->when($options['store_id'], fn ($q, $v) => $q->where('store_id', $v));
+        $builder->when($options['category_id'], fn ($q, $v) => $q->where('category_id', $v));
     }
 }
