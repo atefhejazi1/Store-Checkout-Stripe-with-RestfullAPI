@@ -2,6 +2,60 @@
 @section('page_title', 'My Dashboard')
 
 @section('content')
+
+{{-- ── Pending overlay ──────────────────────────────────────────────────── --}}
+@if (optional($store)->vendor_status !== 'approved')
+<div class="mb-8">
+    <div class="d-flex align-items-start gap-4 p-6 rounded-3 border border-warning bg-light-warning">
+        <div class="pt-1">
+            <i class="bi bi-hourglass-split fs-2 text-warning"></i>
+        </div>
+        <div class="flex-grow-1">
+            <h5 class="fw-bold text-dark mb-1">Your shop is currently under review</h5>
+            <p class="text-gray-600 mb-0 fs-6">
+                You will get full access — including product listings, order management, and store settings —
+                once your account is <strong>approved by the administrator</strong>.
+                This usually takes up to 24 hours.
+            </p>
+        </div>
+    </div>
+</div>
+
+{{-- Locked stats (visual placeholders only) --}}
+<div class="row g-5 mb-8">
+    @foreach (['Products', 'Orders', 'Revenue'] as $label)
+    <div class="col-sm-6 col-xl-4">
+        <div class="card h-100 opacity-50" style="pointer-events:none;user-select:none;">
+            <div class="card-body d-flex align-items-center gap-4">
+                <div class="symbol symbol-40px">
+                    <span class="symbol-label bg-light">
+                        <i class="bi bi-lock fs-4 text-muted"></i>
+                    </span>
+                </div>
+                <div>
+                    <span class="fs-2hx fw-bold text-muted d-block">—</span>
+                    <span class="fs-7 text-gray-400 fw-semibold">{{ $label }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+</div>
+
+{{-- Locked recent orders table --}}
+<div class="card opacity-50" style="pointer-events:none;user-select:none;">
+    <div class="card-header align-items-center py-5">
+        <h3 class="card-title fw-bold fs-5 text-muted">Recent Orders</h3>
+    </div>
+    <div class="card-body text-center py-10 text-muted fs-6">
+        <i class="bi bi-lock fs-2 d-block mb-3"></i>
+        Available after approval
+    </div>
+</div>
+
+@else
+{{-- ── Approved vendor dashboard ────────────────────────────────────────── --}}
+
 {{-- Store header --}}
 <div class="d-flex align-items-center mb-8">
     @if ($store->logo_image)
@@ -118,4 +172,6 @@
         </div>
     </div>
 </div>
+
+@endif
 @endsection

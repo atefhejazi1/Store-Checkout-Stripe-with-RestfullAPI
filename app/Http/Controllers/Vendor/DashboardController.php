@@ -13,6 +13,11 @@ class DashboardController extends Controller
     {
         $store = auth()->user()->store;
 
+        // Pending vendors see the overlay — skip expensive queries
+        if ($store->vendor_status !== 'approved') {
+            return view('vendor.dashboard', ['store' => $store, 'stats' => [], 'recentOrders' => collect()]);
+        }
+
         $stats = [
             'products' => Product::where('store_id', $store->id)->count(),
             'orders'   => Order::where('store_id', $store->id)->count(),

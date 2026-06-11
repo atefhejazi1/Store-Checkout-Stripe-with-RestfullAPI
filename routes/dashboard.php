@@ -39,15 +39,16 @@ Route::prefix('vendor/dashboard')
     // Pending page — accessible before approval
     Route::get('pending', [Vendor\DashboardController::class, 'pending'])->name('pending');
 
-    // All remaining vendor routes require approval
+    // Dashboard — accessible to pending AND approved vendors (shows overlay when pending)
+    Route::get('/', [Vendor\DashboardController::class, 'index'])->name('dashboard');
+
+    // Profile — accessible regardless of approval state
+    Route::get('/profile',    [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile',  [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // All action routes require approval
     Route::middleware('vendor.approved')->group(function () {
-        Route::get('/', [Vendor\DashboardController::class, 'index'])->name('dashboard');
-
-        // Profile
-        Route::get('/profile',    [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile',  [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
         // Products (scoped to own store)
         Route::resource('products', Vendor\ProductController::class);
 

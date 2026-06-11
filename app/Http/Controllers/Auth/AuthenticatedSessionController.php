@@ -35,9 +35,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         if ($user->isVendor()) {
-            return $user->isApprovedVendor()
-                ? redirect()->route('vendor.dashboard')
-                : redirect()->route('vendor.pending');
+            return redirect()->route('vendor.dashboard');
         }
 
         return redirect()->route('home');
