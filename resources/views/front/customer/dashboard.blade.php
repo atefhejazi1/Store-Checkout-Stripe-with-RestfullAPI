@@ -34,6 +34,12 @@
             <a href="{{ route('cart.index') }}" class="cd-btn-ghost">
                 <i class="lni lni-cart"></i> My Cart
             </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="cd-btn-logout">
+                    <i class="lni lni-exit"></i> Sign Out
+                </button>
+            </form>
         </div>
     </div>
 
@@ -201,6 +207,15 @@
     transition:background .2s;
 }
 .cd-btn-ghost:hover { background:rgba(255,255,255,.18);color:#fff; }
+.cd-btn-logout {
+    display:inline-flex;align-items:center;gap:.45rem;
+    background:rgba(239,68,68,.15);color:#fca5a5;
+    border:1px solid rgba(239,68,68,.25);
+    padding:.65rem 1.3rem;border-radius:10px;
+    font-size:.82rem;font-weight:600;cursor:pointer;
+    transition:background .2s,color .2s;
+}
+.cd-btn-logout:hover { background:rgba(239,68,68,.28);color:#fff; }
 
 /* ── Stat cards ── */
 .cd-stat {
