@@ -3,6 +3,7 @@
 use App\Http\Controllers\front\CartController;
 use App\Http\Controllers\front\CategoriesController;
 use App\Http\Controllers\front\CheckoutController;
+use App\Http\Controllers\front\CustomerDashboardController;
 use App\Http\Controllers\front\HomeController;
 use App\Http\Controllers\front\PaymentsController;
 use App\Http\Controllers\front\ProductsController;
@@ -19,6 +20,8 @@ Route::resource('/cart', CartController::class);
 
 // Checkout, payment, and order confirmation require authentication
 Route::middleware('auth')->group(function () {
+    Route::get('customer/dashboard', [CustomerDashboardController::class, 'index'])->name('customer.dashboard');
+
     Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
     Route::post('checkout', [CheckoutController::class, 'store']);
 

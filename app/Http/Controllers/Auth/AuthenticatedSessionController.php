@@ -38,7 +38,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('vendor.dashboard');
         }
 
-        return redirect()->route('home');
+        // Customers land on their personal dashboard
+        return redirect()->route('customer.dashboard');
     }
 
     /**

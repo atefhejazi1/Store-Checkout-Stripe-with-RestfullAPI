@@ -44,18 +44,36 @@
                         <a class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}"
                            href="{{ route('categories.index') }}">Categories</a>
                     </li>
+
+                    {{-- Guest: invite them to sell --}}
                     @guest
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('vendor.register') ? 'active' : '' }}"
-                           href="{{ route('vendor.register') }}">Sell on {{ config('app.name') }}</a>
+                           href="{{ route('vendor.register') }}">
+                            <i class="lni lni-store" style="font-size:.85rem;margin-right:.3rem;"></i>
+                            Sell on {{ config('app.name') }}
+                        </a>
                     </li>
                     @endguest
+
+                    {{-- Customer: link to their dashboard in the center nav --}}
+                    @auth
+                    @if(auth()->user()->isCustomer())
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('customer.dashboard') ? 'active' : '' }}"
+                           href="{{ route('customer.dashboard') }}">
+                            <i class="lni lni-dashboard" style="font-size:.85rem;margin-right:.3rem;"></i>
+                            My Account
+                        </a>
+                    </li>
+                    @endif
+                    @endauth
                 </ul>
 
                 <!-- Right actions -->
                 <div class="nav-actions d-flex align-items-center gap-2">
 
-                    <!-- Cart icon with dropdown -->
+                    <!-- Cart icon (always visible) -->
                     <x-cart-menu />
 
                     <div class="nav-divider"></div>
@@ -71,12 +89,12 @@
                                 Register
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2"
-                                style="min-width:200px;border-radius:10px;padding:.5rem;">
+                                style="min-width:210px;border-radius:12px;padding:.5rem;">
                                 <li>
                                     <a class="dropdown-item rounded-2 py-2 px-3" href="{{ route('register') }}">
                                         <i class="lni lni-user me-2 text-muted"></i>
                                         <span class="fw-semibold" style="font-size:.875rem;">Customer Account</span>
-                                        <div class="text-muted" style="font-size:.75rem;padding-left:1.5rem;">Shop and checkout</div>
+                                        <div class="text-muted" style="font-size:.72rem;padding-left:1.5rem;">Shop and checkout</div>
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider my-1"></li>
@@ -84,34 +102,93 @@
                                     <a class="dropdown-item rounded-2 py-2 px-3" href="{{ route('vendor.register') }}">
                                         <i class="lni lni-store me-2 text-muted"></i>
                                         <span class="fw-semibold" style="font-size:.875rem;">Become a Vendor</span>
-                                        <div class="text-muted" style="font-size:.75rem;padding-left:1.5rem;">Open your own store</div>
+                                        <div class="text-muted" style="font-size:.72rem;padding-left:1.5rem;">Open your own store</div>
                                     </a>
                                 </li>
                             </ul>
                         </div>
 
                     @else
-                        <!-- Dashboard link — admins and vendors only -->
-                        @if (auth()->user()->isAdmin() || auth()->user()->isVendor())
-                            <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('vendor.dashboard') }}"
-                               class="btn-nav-login">Dashboard</a>
+                        @php $authUser = auth()->user(); @endphp
+
+                        {{-- Role-specific dashboard button --}}
+                        @if($authUser->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" class="btn-nav-login">
+                                <i class="lni lni-layout" style="font-size:.8rem;margin-right:.3rem;"></i>Admin Panel
+                            </a>
+                        @elseif($authUser->isVendor())
+                            <a href="{{ route('vendor.dashboard') }}" class="btn-nav-login">
+                                <i class="lni lni-store" style="font-size:.8rem;margin-right:.3rem;"></i>My Store
+                            </a>
+                        @else
+                            <a href="{{ route('customer.dashboard') }}" class="btn-nav-login">
+                                <i class="lni lni-user" style="font-size:.8rem;margin-right:.3rem;"></i>My Account
+                            </a>
                         @endif
 
-                        <!-- User name + logout -->
+                        {{-- User name dropdown (role-specific quick links) --}}
                         <div class="dropdown">
                             <button class="btn-nav-register dropdown-toggle border-0 bg-transparent"
                                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ auth()->user()->name }}
+                                {{ $authUser->name }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2"
-                                style="min-width:180px;border-radius:10px;padding:.5rem;">
+                                style="min-width:200px;border-radius:12px;padding:.5rem;">
+
+                                {{-- Email --}}
                                 <li>
-                                    <span class="dropdown-item-text text-muted py-1 px-3"
-                                          style="font-size:.75rem;">
-                                        {{ auth()->user()->email }}
-                                    </span>
+                                    <div class="px-3 py-2" style="border-bottom:1px solid #f1f5f9;margin-bottom:.35rem;">
+                                        <div style="font-size:.7rem;color:#94a3b8;font-weight:500;">Signed in as</div>
+                                        <div style="font-size:.78rem;color:#374151;font-weight:600;
+                                                    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                            {{ $authUser->email }}
+                                        </div>
+                                    </div>
                                 </li>
+
+                                {{-- Admin links --}}
+                                @if($authUser->isAdmin())
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 px-3" href="{{ route('admin.dashboard') }}">
+                                        <i class="lni lni-layout me-2 text-muted"></i>
+                                        <span style="font-size:.875rem;">Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 px-3" href="{{ route('admin.vendors.index') }}">
+                                        <i class="lni lni-users me-2 text-muted"></i>
+                                        <span style="font-size:.875rem;">Manage Vendors</span>
+                                    </a>
+                                </li>
+
+                                {{-- Vendor links --}}
+                                @elseif($authUser->isVendor())
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 px-3" href="{{ route('vendor.dashboard') }}">
+                                        <i class="lni lni-store me-2 text-muted"></i>
+                                        <span style="font-size:.875rem;">My Store</span>
+                                    </a>
+                                </li>
+
+                                {{-- Customer links --}}
+                                @else
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 px-3" href="{{ route('customer.dashboard') }}">
+                                        <i class="lni lni-dashboard me-2 text-muted"></i>
+                                        <span style="font-size:.875rem;">My Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 px-3" href="{{ route('cart.index') }}">
+                                        <i class="lni lni-cart me-2 text-muted"></i>
+                                        <span style="font-size:.875rem;">My Cart</span>
+                                    </a>
+                                </li>
+                                @endif
+
                                 <li><hr class="dropdown-divider my-1"></li>
+
+                                {{-- Sign out (all roles) --}}
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
@@ -170,10 +247,14 @@
                             <li><a href="{{ route('register') }}">Register</a></li>
                             <li><a href="{{ route('vendor.register') }}">Become a Vendor</a></li>
                         @else
-                            @if (auth()->user()->isAdmin())
+                            @if(auth()->user()->isAdmin())
                                 <li><a href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
-                            @elseif (auth()->user()->isVendor())
-                                <li><a href="{{ route('vendor.dashboard') }}">My Dashboard</a></li>
+                                <li><a href="{{ route('admin.vendors.index') }}">Manage Vendors</a></li>
+                            @elseif(auth()->user()->isVendor())
+                                <li><a href="{{ route('vendor.dashboard') }}">My Store</a></li>
+                            @else
+                                <li><a href="{{ route('customer.dashboard') }}">My Dashboard</a></li>
+                                <li><a href="{{ route('cart.index') }}">My Cart</a></li>
                             @endif
                             <li>
                                 <form method="POST" action="{{ route('logout') }}" style="display:inline">
