@@ -11,7 +11,7 @@ return [
     |
     | Here you may specify which of the database connections below you wish
     | to use as your default connection for database operations. This is
-    | the connection which will be utilized unless another connection
+    | the connection which will be utilized unless another connectionh
     | is explicitly specified when you execute a query / statement.
     |
     */
@@ -59,7 +59,7 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+            ]) + [PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false] : [],
         ],
 
         'mariadb' => [
