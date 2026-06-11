@@ -155,7 +155,7 @@
                 },
                 invalid: { color: '#ef4444' },
             },
-            hidePostalCode: false,
+            hidePostalCode: true,
         });
 
         cardElement.mount('#payment-element');

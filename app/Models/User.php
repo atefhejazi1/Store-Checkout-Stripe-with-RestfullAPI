@@ -46,6 +46,11 @@ class User extends Authenticatable
         return $this->role === 'vendor';
     }
 
+    public function isCustomer(): bool
+    {
+        return $this->role === 'customer';
+    }
+
     public function isApprovedVendor(): bool
     {
         return $this->isVendor() && optional($this->store)->vendor_status === 'approved';
