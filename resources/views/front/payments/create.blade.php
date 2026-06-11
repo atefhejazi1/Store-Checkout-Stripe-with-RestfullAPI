@@ -1,111 +1,175 @@
-<x-front-layout title="Order Payment">
-    <div class="account-login section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
-                    <div id="payment-message" style="display: none;" class="alert alert-info"></div>
+<x-front-layout title="Complete Payment — {{ config('app.name') }}">
 
-                    <form action="" method="post" id="payment-form">
-                        <div id="payment-element"></div>
-                        <button type="submit" id="submit" class="btn">
-                            <span id="button-text">Pay now</span>
-                            <span id="spinner" style="display: none;">Processing...</span>
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-header-title">Complete Payment</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                <li class="breadcrumb-item active">Payment</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="py-10">
+    <div class="container">
+        <div class="row justify-content-center g-5 align-items-start">
+
+            {{-- Payment form --}}
+            <div class="col-lg-6">
+                <div class="bg-white rounded-3 border p-5 p-md-6" style="border-color:#e5e7eb!important;">
+
+                    <div class="d-flex align-items-center gap-3 mb-6">
+                        <div style="width:42px;height:42px;border-radius:10px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i class="lni lni-lock" style="color:#0167f3;font-size:1.1rem;"></i>
+                        </div>
+                        <div>
+                            <h2 style="font-size:1.1rem;font-weight:700;color:#0f172a;margin:0;">Secure Payment</h2>
+                            <p style="font-size:.78rem;color:#64748b;margin:0;">Your order #{{ $order->number }}</p>
+                        </div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg"
+                             alt="Stripe" style="height:22px;margin-left:auto;opacity:.5;">
+                    </div>
+
+                    {{-- Stripe error message --}}
+                    <div id="payment-message"
+                         style="display:none;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;
+                                border-radius:8px;padding:.75rem 1rem;font-size:.82rem;margin-bottom:1.25rem;">
+                    </div>
+
+                    <form id="payment-form">
+                        <div id="payment-element" style="margin-bottom:1.5rem;"></div>
+
+                        <button type="submit" id="submit"
+                                style="width:100%;padding:.85rem;background:#0167f3;color:#fff;border:none;
+                                       border-radius:10px;font-family:'Inter',sans-serif;font-size:.88rem;
+                                       font-weight:700;letter-spacing:.03em;cursor:pointer;
+                                       transition:background .2s,transform .15s,box-shadow .2s;
+                                       display:flex;align-items:center;justify-content:center;gap:.6rem;">
+                            <span id="button-text" style="display:flex;align-items:center;gap:.5rem;">
+                                <i class="lni lni-lock"></i> Pay ${{ number_format($order->items->sum(fn($i) => $i->price * $i->quantity), 2) }}
+                            </span>
+                            <span id="spinner" style="display:none;">
+                                Processing…
+                            </span>
                         </button>
                     </form>
+
+                    <p style="text-align:center;margin-top:1rem;font-size:.73rem;color:#94a3b8;">
+                        <i class="lni lni-lock" style="color:#10b981;"></i>
+                        256-bit SSL encryption · Powered by Stripe
+                    </p>
                 </div>
             </div>
+
+            {{-- Order summary --}}
+            <div class="col-lg-4">
+                <div class="bg-white rounded-3 border p-5" style="border-color:#e5e7eb!important;">
+                    <h3 style="font-size:.9rem;font-weight:700;color:#0f172a;margin-bottom:1.25rem;
+                               text-transform:uppercase;letter-spacing:.06em;">Order Summary</h3>
+
+                    @foreach($order->items as $item)
+                    <div style="display:flex;align-items:center;justify-content:space-between;
+                                padding:.6rem 0;border-bottom:1px solid #f1f5f9;gap:.75rem;">
+                        <div style="flex:1;min-width:0;">
+                            <div style="font-size:.85rem;font-weight:600;color:#1e293b;
+                                        white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                {{ $item->product_name }}
+                            </div>
+                            <div style="font-size:.75rem;color:#94a3b8;">Qty: {{ $item->quantity }}</div>
+                        </div>
+                        <div style="font-size:.88rem;font-weight:600;color:#0f172a;flex-shrink:0;">
+                            ${{ number_format($item->price * $item->quantity, 2) }}
+                        </div>
+                    </div>
+                    @endforeach
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                padding-top:1rem;margin-top:.25rem;">
+                        <span style="font-size:.82rem;color:#64748b;">Subtotal</span>
+                        <span style="font-size:.88rem;font-weight:600;">
+                            ${{ number_format($order->items->sum(fn($i) => $i->price * $i->quantity), 2) }}
+                        </span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:.5rem;">
+                        <span style="font-size:.82rem;color:#64748b;">Shipping</span>
+                        <span style="font-size:.88rem;font-weight:600;color:#10b981;">Free</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                padding-top:1rem;margin-top:.75rem;border-top:2px solid #0f172a;">
+                        <span style="font-size:.95rem;font-weight:700;color:#0f172a;">Total</span>
+                        <span style="font-size:1.1rem;font-weight:800;color:#0167f3;">
+                            ${{ number_format($order->items->sum(fn($i) => $i->price * $i->quantity), 2) }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+</section>
 
-    <script src="https://js.stripe.com/v3/"></script>
-    <script>
-        // This is your test publishable API key.
-        const stripe = Stripe("{{ config('services.stripe.publishable_key') }}");
+@push('scripts')
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe   = Stripe("{{ config('services.stripe.publishable_key') }}");
+    const submitBtn = document.getElementById('submit');
+    let elements;
 
-        let elements;
+    (async function initialize() {
+        const res = await fetch("{{ route('stripe.paymentIntent.create', $order->id) }}", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ _token: "{{ csrf_token() }}" }),
+        });
 
-        initialize();
-
-        document
-            .querySelector("#payment-form")
-            .addEventListener("submit", handleSubmit);
-
-        // Fetches a payment intent and captures the client secret
-        async function initialize() {
-            const {
-                clientSecret
-            } = await fetch("{{ route('stripe.paymentIntent.create', $order->id) }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "_token": "{{ csrf_token() }}"
-                }),
-            }).then((r) => r.json());
-
-            elements = stripe.elements({
-                clientSecret
-            });
-
-            const paymentElement = elements.create("payment");
-            paymentElement.mount("#payment-element");
+        if (!res.ok) {
+            showMessage('Failed to initialize payment. Please refresh and try again.');
+            return;
         }
 
-        async function handleSubmit(e) {
-            e.preventDefault();
-            setLoading(true);
+        const { clientSecret } = await res.json();
 
-            const {
-                error
-            } = await stripe.confirmPayment({
-                elements,
-                confirmParams: {
-                    // Make sure to change this to your payment completion page
-                    return_url: "{{ route('stripe.return', $order->id) }}",
-                },
-            });
+        elements = stripe.elements({ clientSecret, appearance: {
+            theme: 'stripe',
+            variables: { colorPrimary: '#0167f3', fontFamily: 'Inter, system-ui, sans-serif',
+                         borderRadius: '8px', colorText: '#0f172a' }
+        }});
 
-            // This point will only be reached if there is an immediate error when
-            // confirming the payment. Otherwise, your customer will be redirected to
-            // your `return_url`. For some payment methods like iDEAL, your customer will
-            // be redirected to an intermediate site first to authorize the payment, then
-            // redirected to the `return_url`.
-            if (error.type === "card_error" || error.type === "validation_error") {
-                showMessage(error.message);
-            } else {
-                showMessage("An unexpected error occurred.");
-            }
+        elements.create('payment').mount('#payment-element');
+    })();
 
-            setLoading(false);
+    document.getElementById('payment-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: { return_url: "{{ route('stripe.return', $order->id) }}" },
+        });
+
+        if (error) {
+            showMessage(error.message ?? 'An unexpected error occurred.');
         }
 
-        // ------- UI helpers -------
+        setLoading(false);
+    });
 
-        function showMessage(messageText) {
-            const messageContainer = document.querySelector("#payment-message");
+    function showMessage(msg) {
+        const el = document.getElementById('payment-message');
+        el.textContent = msg;
+        el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 6000);
+    }
 
-            messageContainer.style.display = "block";
-            messageContainer.textContent = messageText;
+    function setLoading(loading) {
+        submitBtn.disabled = loading;
+        document.getElementById('button-text').style.display = loading ? 'none'   : 'flex';
+        document.getElementById('spinner').style.display     = loading ? 'inline' : 'none';
+        if (!loading) submitBtn.style.transform = '';
+    }
+</script>
+@endpush
 
-            setTimeout(function() {
-                messageContainer.style.display = "none";
-                messageText.textContent = "";
-            }, 4000);
-        }
-
-        // Show a spinner on payment submission
-        function setLoading(isLoading) {
-            if (isLoading) {
-                // Disable the button and show a spinner
-                document.querySelector("#submit").disabled = true;
-                document.querySelector("#spinner").style.display = "inline";
-                document.querySelector("#button-text").style.display = "none";
-            } else {
-                document.querySelector("#submit").disabled = false;
-                document.querySelector("#spinner").style.display = "none";
-                document.querySelector("#button-text").style.display = "inline";
-            }
-        }
-    </script>
 </x-front-layout>
