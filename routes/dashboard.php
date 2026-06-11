@@ -21,6 +21,7 @@ Route::prefix('admin/dashboard')
     // Vendor management
     Route::get('vendors', [Admin\VendorController::class, 'index'])->name('vendors.index');
     Route::patch('vendors/{store}/approve', [Admin\VendorController::class, 'approve'])->name('vendors.approve');
+    Route::patch('vendors/{store}/reject',  [Admin\VendorController::class, 'reject'])->name('vendors.reject');
     Route::patch('vendors/{store}/block',   [Admin\VendorController::class, 'block'])->name('vendors.block');
 
     // Categories (full CRUD — admin only)
