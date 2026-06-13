@@ -1,9 +1,3 @@
-databases:
-  - name: shopzone-db
-    plan: free
-    databaseName: shopzone
-    user: shopzone_user
-
 services:
   - type: web
     name: store-checkout-stripe
@@ -22,25 +16,28 @@ services:
       - key: APP_URL
         value: https://store-checkout-stripe.onrender.com
       - key: DB_CONNECTION
-        value: pgsql
+        value: mysql
       - key: DB_HOST
-        fromDatabase:
-          name: shopzone-db
-          property: host
+        sync: false
       - key: DB_PORT
-        fromDatabase:
-          name: shopzone-db
-          property: port
+        value: 3306
       - key: DB_DATABASE
-        fromDatabase:
-          name: shopzone-db
-          property: database
+        sync: false
       - key: DB_USERNAME
-        fromDatabase:
-          name: shopzone-db
-          property: user
+        sync: false
       - key: DB_PASSWORD
-        fromDatabase:
-          name: shopzone-db
-          property: password
-      
+        sync: false
+      - key: SESSION_DRIVER
+        value: cookie
+      - key: CACHE_STORE
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: error
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false

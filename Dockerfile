@@ -3,11 +3,11 @@ FROM php:8.2-apache
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git curl libpng-dev libonig-dev libxml2-dev \
-    libzip-dev zip unzip nodejs npm libpq-dev \
+    libzip-dev zip unzip nodejs npm \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd zip
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -40,4 +40,8 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Create startup script
-RUN printf '#!/bin/bash\nset -e\n# Create .env from example if not present (Render injects real values via env vars)\nif [ ! -f .env ]; then\n  cp .env.example .env\nfi\nphp artisan config:clear\nphp artisan migrate --force\nphp artisan config:cache\nphp artisan route:cache\nphp artisan view:cac
+RUN printf '#!/bin/bash\nset -e\n# Create .env from example if not present (Render injects real values via env vars)\nif [ ! -f .env ]; then\n  cp .env.example .env\nfi\nphp artisan config:clear\nphp artisan migrate --force\nphp artisan db:seed --force\nphp artisan config:cache\nphp artisan route:cache\nphp artisan view:cache\nexec apache2-foreground\n' > /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
+
+EXPOSE 80
+
+CMD ["/usr/local/bin/start.sh"]
