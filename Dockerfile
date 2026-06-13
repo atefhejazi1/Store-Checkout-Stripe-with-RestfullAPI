@@ -40,8 +40,4 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Create startup script
-RUN printf '#!/bin/bash\nset -e\nphp artisan config:clear\nphp artisan migrate --force\nphp artisan config:cache\nphp artisan route:cache\nphp artisan view:cache\nexec apache2-foreground\n' > /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
-
-EXPOSE 80
-
-CMD ["/usr/local/bin/start.sh"]
+RUN printf '#!/bin/bash\nset -e\n# Create .env from example if not present (Render injects real values via env vars)\nif [ ! -f .env ]; then\n  cp .env.example .env\nfi\nphp artisan config:clear\nphp artisan migrate --force\nphp artisan config:cache\nphp artisan route:cache\nphp artisan view:cac
