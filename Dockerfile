@@ -66,6 +66,12 @@ RUN cp nginx.conf /etc/nginx/sites-available/default \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
+# ── PHP-FPM: expose OS env vars to web workers ───────────────────────────────
+# By default PHP-FPM clears the environment (clear_env=yes), so getenv() and
+# $_ENV return nothing inside web requests. Setting clear_env=no lets the
+# workers inherit Render's injected env vars (DB_*, STRIPE_*, secrets, etc.).
+RUN echo 'clear_env = no' >> /usr/local/etc/php-fpm.d/www.conf
+
 # ── Permissions ───────────────────────────────────────────────────────────────
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
