@@ -40,7 +40,7 @@ services:
         value: stderr
       - key: LOG_LEVEL
         value: error
-      - key: STRIPE_KEY
+      - key: STRIPE_PUBLISHABLE_KEY
         sync: false
-      - key: STRIPE_SECRET
+      - key: STRIPE_SECRET_KEY
         sync: false
