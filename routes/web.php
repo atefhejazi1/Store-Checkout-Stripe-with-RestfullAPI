@@ -38,8 +38,9 @@ Route::middleware('auth')->group(function () {
 
 // ── Secure one-time migration trigger ────────────────────────────────────────
 // Set MIGRATION_SECRET in Render env vars. Remove once schema is stable.
+// Uses getenv() so it reads the live OS env even when config:cache is active.
 Route::get('/run-migrations/{token}', function (string $token) {
-    $secret = config('services.migration_secret');
+    $secret = getenv('MIGRATION_SECRET');
 
     if (! $secret || ! hash_equals("$secret", "$token")) {
         abort(404);
@@ -59,8 +60,9 @@ Route::get('/run-migrations/{token}', function (string $token) {
 
 // ── Secure one-time seeder trigger ───────────────────────────────────────────
 // Set SEEDER_SECRET in Render env vars. Remove once seed data is confirmed.
+// Uses getenv() so it reads the live OS env even when config:cache is active.
 Route::get('/run-seeders/{token}', function (string $token) {
-    $secret = config('services.seeder_secret');
+    $secret = getenv('SEEDER_SECRET');
 
     if (! $secret || ! hash_equals("$secret", "$token")) {
         abort(404);
