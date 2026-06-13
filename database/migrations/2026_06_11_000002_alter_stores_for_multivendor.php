@@ -12,16 +12,14 @@ return new class extends Migration
         Schema::table('stores', function (Blueprint $table) {
             $table->foreignId('user_id')
                   ->nullable()
-                  ->after('id')
                   ->constrained('users')
                   ->nullOnDelete();
 
-            $table->string('business_phone')->nullable()->after('description');
-            $table->json('payout_details')->nullable()->after('business_phone');
+            $table->string('business_phone')->nullable();
+            $table->json('payout_details')->nullable();
 
             $table->enum('vendor_status', ['pending', 'approved', 'blocked'])
-                  ->default('pending')
-                  ->after('status');
+                  ->default('pending');
         });
     }
 
