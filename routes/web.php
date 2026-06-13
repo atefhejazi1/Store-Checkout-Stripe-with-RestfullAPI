@@ -7,6 +7,7 @@ use App\Http\Controllers\front\CustomerDashboardController;
 use App\Http\Controllers\front\HomeController;
 use App\Http\Controllers\front\PaymentsController;
 use App\Http\Controllers\front\ProductsController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -33,6 +34,30 @@ Route::middleware('auth')->group(function () {
         ->name('stripe.return');
     Route::get('orders/{order}/confirmation', [PaymentsController::class, 'confirmation'])
         ->name('orders.confirmation');
+});
+
+// ── Secure one-time migration trigger ────────────────────────────────────────
+// Used on Render (no SSH) to manually run migrations when the automatic
+// startup-script migration fails. Set MIGRATION_SECRET in Render env vars.
+// Remove this route (and the env var) once your schema is stable.
+Route::get('/run-migrations/{token}', function (string $token) {
+    $secret = config('services.migration_secret');
+
+    // Abort with 404 (not 403) so the route's existence is not revealed
+    if (! $secret || ! hash_equals("$secret", "$token")) {
+        abort(404);
+    }
+
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        $output = Artisan::output();
+    } catch (\Throwable $e) {
+        return response("Migration failed:\n" . $e->getMessage(), 500)
+            ->header('Content-Type', 'text/plain');
+    }
+
+    return response("Migrations ran successfully.\n\n" . $output, 200)
+        ->header('Content-Type', 'text/plain');
 });
 
 require __DIR__ . '/auth.php';
