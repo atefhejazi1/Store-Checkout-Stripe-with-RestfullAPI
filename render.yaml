@@ -1,7 +1,7 @@
 databases:
   - name: shopzone-db
     plan: free
-    databaseName: shopzone
+    databaseName: storezone
     user: shopzone_user
 
 services:
