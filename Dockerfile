@@ -82,9 +82,8 @@ php artisan config:clear\n\
 php artisan cache:clear\n\
 echo "[start] Running migrations"\n\
 php artisan migrate --force\n\
-echo "[start] Caching config / routes / views"\n\
+echo "[start] Caching config and views"\n\
 php artisan config:cache\n\
-php artisan route:cache\n\
 php artisan view:cache\n\
 echo "[start] Starting PHP-FPM"\n\
 php-fpm -D\n\
