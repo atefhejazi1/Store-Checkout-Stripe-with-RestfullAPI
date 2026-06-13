@@ -40,6 +40,7 @@ return [
     ],
 
     'migration_secret' => env('MIGRATION_SECRET'),
+    'seeder_secret'    => env('SEEDER_SECRET'),
 
 
 ];

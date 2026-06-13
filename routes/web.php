@@ -37,13 +37,10 @@ Route::middleware('auth')->group(function () {
 });
 
 // ── Secure one-time migration trigger ────────────────────────────────────────
-// Used on Render (no SSH) to manually run migrations when the automatic
-// startup-script migration fails. Set MIGRATION_SECRET in Render env vars.
-// Remove this route (and the env var) once your schema is stable.
+// Set MIGRATION_SECRET in Render env vars. Remove once schema is stable.
 Route::get('/run-migrations/{token}', function (string $token) {
     $secret = config('services.migration_secret');
 
-    // Abort with 404 (not 403) so the route's existence is not revealed
     if (! $secret || ! hash_equals("$secret", "$token")) {
         abort(404);
     }
@@ -57,6 +54,27 @@ Route::get('/run-migrations/{token}', function (string $token) {
     }
 
     return response("Migrations ran successfully.\n\n" . $output, 200)
+        ->header('Content-Type', 'text/plain');
+});
+
+// ── Secure one-time seeder trigger ───────────────────────────────────────────
+// Set SEEDER_SECRET in Render env vars. Remove once seed data is confirmed.
+Route::get('/run-seeders/{token}', function (string $token) {
+    $secret = config('services.seeder_secret');
+
+    if (! $secret || ! hash_equals("$secret", "$token")) {
+        abort(404);
+    }
+
+    try {
+        Artisan::call('db:seed', ['--force' => true]);
+        $output = Artisan::output();
+    } catch (\Throwable $e) {
+        return response("Seeding failed:\n" . $e->getMessage(), 500)
+            ->header('Content-Type', 'text/plain');
+    }
+
+    return response("Database seeded successfully.\n\n" . $output, 200)
         ->header('Content-Type', 'text/plain');
 });
 

@@ -21,6 +21,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Trust Render's load balancer so asset() / url() produce https:// URLs.
+        // Render forwards X-Forwarded-Proto: https; without this the app sees
+        // plain HTTP and generates mixed-content asset URLs the browser blocks.
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'abilities'       => CheckAbilities::class,
             'ability'         => CheckForAnyAbility::class,
