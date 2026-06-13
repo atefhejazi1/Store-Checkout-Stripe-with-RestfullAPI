@@ -85,6 +85,7 @@ RUN printf '#!/bin/bash\n\
 set -e\n\
 echo "[start] Clearing stale caches"\n\
 php artisan config:clear\n\
+php artisan route:clear\n\
 php artisan cache:clear\n\
 echo "[start] Running migrations"\n\
 php artisan migrate --force\n\
